@@ -12,15 +12,31 @@ tableMap = function(gdoc) {
 };
 
 makeMap = function(locations) {
-  var layer, map, marker;
+  var layer, map;
   layer = new L.StamenTileLayer("toner");
   map = new L.Map("map", {
-    center: new L.LatLng(37.7, -122.4),
-    zoom: 12
+    center: new L.LatLng(37.8, -122.4),
+    zoom: 10
   });
   map.addLayer(layer);
-  marker = L.marker([37.78, -122.39]).addTo(map);
-  marker.bindPopup("<b>Hello world!</b><br>I am a popup.");
+  _.each(locations, function(location, i) {
+    console.log("LOCATION", location);
+    return GMaps.geocode({
+      address: location.location,
+      callback: function(results, status) {
+        var latlng, marker;
+        latlng = results[0].geometry.location;
+        location.lat = latlng.lat();
+        location.lng = latlng.lng();
+        console.log("latlng", latlng.lat(), latlng.lng());
+        marker = L.marker([latlng.lat(), latlng.lng()]).addTo(map);
+        marker.bindPopup(location.caption);
+        if (i === 0) {
+          return map.setView([latlng.lat(), latlng.lng()], 14);
+        }
+      }
+    });
+  });
   return map.on('click', function(e) {
     return console.log(e.latlng);
   });
