@@ -19,20 +19,25 @@ makeMap = function(locations) {
     zoom: 10
   });
   map.addLayer(layer);
+  console.log("location count", locations);
   _.each(locations, function(location, i) {
     console.log("LOCATION", location);
     return GMaps.geocode({
       address: location.location,
       callback: function(results, status) {
         var latlng, marker;
-        latlng = results[0].geometry.location;
-        location.lat = latlng.lat();
-        location.lng = latlng.lng();
-        console.log("latlng", latlng.lat(), latlng.lng());
-        marker = L.marker([latlng.lat(), latlng.lng()]).addTo(map);
-        marker.bindPopup(location.caption);
-        if (i === 0) {
-          return map.setView([latlng.lat(), latlng.lng()], 14);
+        if (results !== null) {
+          latlng = results[0].geometry.location;
+          location.lat = latlng.lat();
+          location.lng = latlng.lng();
+          console.log(i, "latlng", latlng.lat(), latlng.lng(), location.location);
+          marker = L.marker([latlng.lat(), latlng.lng()]).addTo(map);
+          marker.bindPopup(location.caption);
+          if (i === 0) {
+            return map.setView([latlng.lat(), latlng.lng()], 5);
+          }
+        } else {
+          return console.log("GMAPS ERROR");
         }
       }
     });

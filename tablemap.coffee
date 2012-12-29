@@ -16,24 +16,27 @@ makeMap = (locations) ->
 	});
 	map.addLayer(layer);
 
+	console.log "location count", locations
 	_.each(locations, (location, i) ->
 		console.log "LOCATION", location
 
 		GMaps.geocode({
 			address: location.location,
 			callback: (results, status) ->
-				latlng = results[0].geometry.location
+				if results isnt null
+					latlng = results[0].geometry.location
 
-				location.lat = latlng.lat()
-				location.lng = latlng.lng()
+					location.lat = latlng.lat()
+					location.lng = latlng.lng()
 
-				console.log "latlng", latlng.lat(), latlng.lng()
-				marker = L.marker([latlng.lat(), latlng.lng()]).addTo(map)
-				marker.bindPopup(location.caption)
+					console.log i, "latlng", latlng.lat(), latlng.lng(), location.location
+					marker = L.marker([latlng.lat(), latlng.lng()]).addTo(map)
+					marker.bindPopup(location.caption)
 
-				if i is 0
-					map.setView([latlng.lat(), latlng.lng()], 14)
-
+					if i is 0
+						map.setView([latlng.lat(), latlng.lng()], 5)
+				else
+					console.log "GMAPS ERROR"
 		})
 
 
