@@ -23,11 +23,11 @@ makeMap = (locations) ->
 	_.each(locations, (location, i) ->
 		console.log "LOCATION", location
 
-		locationHtml = ich.locationItem(location)
+		locationHtml = ich.locationItemLi(location)
 
-		console.log "Location=>", location, "HTML=>", locationHtml
+		console.log "Location=>", location, "HTML=>", $(locationHtml)
+
 		$("#location-list").append($(locationHtml))
-
 
 		GMaps.geocode({
 			address: location.location,
@@ -40,8 +40,8 @@ makeMap = (locations) ->
 
 					console.log i, "latlng", latlng.lat(), latlng.lng(), location.location
 					marker = L.marker([latlng.lat(), latlng.lng()]).addTo(map)
-					marker.bindPopup(location.caption)
-
+					marker.bindPopup(ich.locationItem(location, true), {maxHeight: 500})
+					console.log "MARKER", $(ich.locationItem(location)).html(), ich.locationItem(location, true)
 					if i is 0
 						map.setView([latlng.lat(), latlng.lng()], 14)
 				else if status is "OVER_QUERY_LIMIT"

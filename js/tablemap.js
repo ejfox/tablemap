@@ -25,8 +25,8 @@ makeMap = function(locations) {
   _.each(locations, function(location, i) {
     var locationHtml;
     console.log("LOCATION", location);
-    locationHtml = ich.locationItem(location);
-    console.log("Location=>", location, "HTML=>", locationHtml);
+    locationHtml = ich.locationItemLi(location);
+    console.log("Location=>", location, "HTML=>", $(locationHtml));
     $("#location-list").append($(locationHtml));
     return GMaps.geocode({
       address: location.location,
@@ -38,7 +38,10 @@ makeMap = function(locations) {
           location.lng = latlng.lng();
           console.log(i, "latlng", latlng.lat(), latlng.lng(), location.location);
           marker = L.marker([latlng.lat(), latlng.lng()]).addTo(map);
-          marker.bindPopup(location.caption);
+          marker.bindPopup(ich.locationItem(location, true), {
+            maxHeight: 500
+          });
+          console.log("MARKER", $(ich.locationItem(location)).html(), ich.locationItem(location, true));
           if (i === 0) {
             return map.setView([latlng.lat(), latlng.lng()], 14);
           }

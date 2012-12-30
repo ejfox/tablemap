@@ -390,6 +390,10 @@ a:visited {
   border-radius: 4px;
   margin: .4em 0;
 }
+.leaflet-popup-content-wrapper img {
+  width: 100%;
+  height: auto;
+}
 /*		Tablet Layout: 768px.
 		Gutters: 24px.
 		Outer margins: 28px.
