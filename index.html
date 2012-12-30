@@ -44,8 +44,14 @@
 	<!-- And Tabletop | https://github.com/jsoma/tabletop -->
 	<script src="js/tabletop.js" type="text/javascript" charset="utf-8"></script>
 
+	<script src="js/ich.js" type="text/javascript" charset="utf-8"></script>
 
+	<!--
 	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC-U_Oh5Tkti0T_NJP8wsTr3Z4s_imu4Zs&sensor=true"></script>
+	-->
+
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+
 
 	<script src="js/gmaps.js" type="text/javascript" charset="utf-8"></script>
 	<script src="js/leaflet.js" type="text/javascript" charset="utf-8"></script>
@@ -66,8 +72,9 @@
 		<div id="map">
 
 		</div>
-		<div id="gmap-map"
 
+		<div id="locations">
+			<ul id="location-list"></ul>
 		</div>
 	</section>
 
@@ -75,13 +82,22 @@
 </div>
 
 
+
+<script id="locationItem" type="text/html">
+  <li>
+  <span class="location-text">{{location}}</span> | <span class="location-caption">{{caption}}</span> {{#imageurl}}<img src='{{imageurl}}' class='location-image'/>{{/imageurl}}
+  </li>
+</script>
+
+
+
 <script src="js/tablemap.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" charset="utf-8">
 $(document).ready(function(){
-	key1 = "0ApAkxBfw1JT4dHNKX0FNclJoVnVvVUZybkZqYjEzYVE"
-	key2 = "0ApAkxBfw1JT4dG9acTdPU01wcE56WS1xNnU3TnZscWc"
+	var key1 = "0ApAkxBfw1JT4dHNKX0FNclJoVnVvVUZybkZqYjEzYVE"
+	var key2 = "0ApAkxBfw1JT4dG9acTdPU01wcE56WS1xNnU3TnZscWc"
 
-	Tabletop.init( { key: key2,
+	Tabletop.init( { key: key1,
 		callback: function(data, tabletop) {
 			tableMap(data)
 		},
@@ -89,5 +105,9 @@ $(document).ready(function(){
 	} )
 });
 </script>
+
+<!--
+<script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>
+-->
 </body>
 </html>

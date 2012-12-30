@@ -7,6 +7,9 @@ tableMap = (gdoc) ->
 
 	makeMap(locations)
 
+geocodeLocation = (location) ->
+
+
 makeMap = (locations) ->
 
 	layer = new L.StamenTileLayer("toner");
@@ -19,6 +22,12 @@ makeMap = (locations) ->
 	console.log "location count", locations
 	_.each(locations, (location, i) ->
 		console.log "LOCATION", location
+
+		locationHtml = ich.locationItem(location)
+
+		console.log "Location=>", location, "HTML=>", locationHtml
+		$("#location-list").append($(locationHtml))
+
 
 		GMaps.geocode({
 			address: location.location,
@@ -34,11 +43,10 @@ makeMap = (locations) ->
 					marker.bindPopup(location.caption)
 
 					if i is 0
-						map.setView([latlng.lat(), latlng.lng()], 5)
-				else
-					console.log "GMAPS ERROR"
+						map.setView([latlng.lat(), latlng.lng()], 14)
+				else if status is "OVER_QUERY_LIMIT"
+					console.log "GMAPS ERROR", results, status
 		})
-
 
 	)
 
