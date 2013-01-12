@@ -1,52 +1,71 @@
 test = 0
 locations = []
+locationList = []
 
 tableMap = (gdoc) ->
-	console.log gdoc
+	#console.log gdoc
 	locations = gdoc
 
 	makeMap(locations)
 
 geocodeLocation = (location) ->
+	console.log("Location", location)
+	baseUrl = "http://open.mapquestapi.com/nominatim/v1/search.php?format=json&json_callback=placeMarker"
+	addr = "&q="+location.location
 
+
+
+	url = encodeURI(baseUrl + addr + "&addressdetails=1&limit=1")
+
+	console.log "URL>", url
+
+	$.ajax({
+		url: url
+		type: "GET"
+		dataType: "script"
+		cache: true
+	})
+
+
+placesMarked = 0
+placeMarker = (result) ->
+	console.log("geoReturn", result[0])
+
+	location.lat = result[0].lat
+	location.lng = result[0].lon
+	marker = L.marker([location.lat, location.lng]).addTo(map)
+
+	thisLocation = _.filter(locationList, (row) -> return row.i == placesMarked)
+
+	console.log("THIS LOCATION?", placesMarked, thisLocation[0])
+	marker.bindPopup(ich.locationItem(thisLocation[0], true), {maxHeight: 500})
+	placesMarked++
 
 makeMap = (locations) ->
+	locationList = []
+
+	_.each(locations, (location, i) ->
+		#console.log "LOCATION", location
+		#console.log "Location=>", location, "HTML=>", $(locationHtml)
+
+		location.i = i
+		locationList.push(location)
+
+		geocodeLocation(location)
+
+		locationHtml = ich.locationItemLi(location)
+		$("#location-list").append($(locationHtml))
 
 	layer = new L.StamenTileLayer("toner");
-	map = new L.Map("map", {
+	window.map = new L.Map("map", {
 	    center: new L.LatLng(37.8, -122.4),
 	    zoom: 10
 	});
 	map.addLayer(layer);
 
-	console.log "location count", locations
-	_.each(locations, (location, i) ->
-		console.log "LOCATION", location
 
-		locationHtml = ich.locationItemLi(location)
 
-		console.log "Location=>", location, "HTML=>", $(locationHtml)
 
-		$("#location-list").append($(locationHtml))
-
-		GMaps.geocode({
-			address: location.location,
-			callback: (results, status) ->
-				if results isnt null
-					latlng = results[0].geometry.location
-
-					location.lat = latlng.lat()
-					location.lng = latlng.lng()
-
-					console.log i, "latlng", latlng.lat(), latlng.lng(), location.location
-					marker = L.marker([latlng.lat(), latlng.lng()]).addTo(map)
-					marker.bindPopup(ich.locationItem(location, true), {maxHeight: 500})
-					console.log "MARKER", $(ich.locationItem(location)).html(), ich.locationItem(location, true)
-					if i is 0
-						map.setView([latlng.lat(), latlng.lng()], 14)
-				else if status is "OVER_QUERY_LIMIT"
-					console.log "GMAPS ERROR", results, status
-		})
 
 	)
 
@@ -55,10 +74,6 @@ makeMap = (locations) ->
 
 	# lat: 37.78292608704405
 	# lng: -122.39318847656249
-
-
-
-
 
 	map.on('click', (e) ->
 		console.log(e.latlng)

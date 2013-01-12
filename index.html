@@ -53,7 +53,9 @@
 	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
 
 
-	<script src="js/gmaps.js" type="text/javascript" charset="utf-8"></script>
+<!--	<script src="js/gmaps.js" type="text/javascript" charset="utf-8"></script> -->
+
+
 	<script src="js/leaflet.js" type="text/javascript" charset="utf-8"></script>
 	<link rel="stylesheet" href="leaflet.css" type="text/css" media="screen" title="Primary Stylesheet" charset="utf-8">
 
@@ -88,7 +90,7 @@
 </script>
 
 <script id="locationItemLi" type="text/html">
- <li><span class="location-text">{{location}}</span> | <span class="location-caption">{{caption}}</span> {{#imageurl}}<img src='{{imageurl}}' class='location-image'/>{{/imageurl}}
+ <li>{{i}} <span class="location-text">{{location}}</span> | <span class="location-caption"> <a href="{{link}}">{{caption}}</a></span> {{#imageurl}}<img src='{{imageurl}}' class='location-image'/>{{/imageurl}}
  </li>
 </script>
 
@@ -100,7 +102,7 @@ $(document).ready(function(){
 	var key1 = "0ApAkxBfw1JT4dHNKX0FNclJoVnVvVUZybkZqYjEzYVE"
 	var key2 = "0ApAkxBfw1JT4dG9acTdPU01wcE56WS1xNnU3TnZscWc"
 
-	Tabletop.init( { key: key1,
+	Tabletop.init( { key: key2,
 		callback: function(data, tabletop) {
 			tableMap(data)
 		},
